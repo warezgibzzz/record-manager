@@ -1,32 +1,37 @@
-import model.User;
-import security.PBKDF2HashUtil;
-import service.UserService;
+import command.ExitAction;
+import org.jline.reader.EndOfFileException;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.reader.UserInterruptException;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+import service.CommandResolver;
+import service.StateFabric;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
+import java.io.IOException;
+import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException {
-        System.out.println("Hello");
+    public static void main(String[] args) throws IOException {
+        Terminal terminal = TerminalBuilder.builder()
+                .system(true)
+                .build();
+        LineReader lineReader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .build();
+        String prompt = "record-manager # ";
 
-        PBKDF2HashUtil hashUtil = new PBKDF2HashUtil();
-        UserService userService = new UserService();
+        Map<String, Object> state = StateFabric.getState();
+        CommandResolver resolver = new CommandResolver(lineReader, state);
 
-
-        User admin = new User();
-
-        byte[] salt = hashUtil.generateSalt();
-        byte[] password = hashUtil.hashPassword(salt, "123123123");
-
-        admin.setName("admin");
-        admin.setSalt((new String(salt)));
-        admin.setPassword((new String(password)));
-
-//        userService.saveUser(admin);
-
-        for (User user : userService.findAllUsers()) {
-            System.out.println(user);
+        while (true) {
+            try {
+                resolver.executeWidget(lineReader.readLine(prompt));
+            } catch (UserInterruptException e) {
+                (new ExitAction()).apply();
+            } catch (EndOfFileException e) {
+                return;
+            }
         }
     }
 }
