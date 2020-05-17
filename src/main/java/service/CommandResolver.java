@@ -17,10 +17,6 @@ public class CommandResolver extends org.jline.builtins.Widgets {
 
         Map<String, Widget> actions = (Map<String, Widget>) state.get("actions");
 
-        for (Map.Entry<String, Widget> action : actions.entrySet()) {
-            System.out.println(action.getKey());
-            addWidget(action.getKey(), action.getValue());
-        }
-
+        actions.forEach((k, v) -> addWidget(k, v));
     }
 }

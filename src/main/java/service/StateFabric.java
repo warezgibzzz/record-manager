@@ -23,7 +23,7 @@ public class StateFabric {
     private static Map<String, Object> publicActions() {
         Map<String, Object> actions = new HashMap<>();
         actions.put("login", new LoginAction());
-        actions.put("sign-up", new LoginAction());
+        actions.put("sign-up", new SignUpAction());
         actions.put("exit", new ExitAction());
 
         return actions;
