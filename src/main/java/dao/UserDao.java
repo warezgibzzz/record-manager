@@ -7,7 +7,7 @@ import org.hibernate.query.Query;
 import javax.persistence.criteria.*;
 import java.util.List;
 
-import static service.DatabaseSessionFactoryFabric.*;
+import static service.DatabaseSessionFactory.*;
 
 
 public class UserDao implements DaoInterface {

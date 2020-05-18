@@ -5,10 +5,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
-public class DatabaseSessionFactoryFabric {
+public class DatabaseSessionFactory {
     private static SessionFactory sessionFactory;
 
-    private DatabaseSessionFactoryFabric() {
+    private DatabaseSessionFactory() {
     }
 
     public static SessionFactory getSessionFactory() {
