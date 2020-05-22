@@ -4,34 +4,46 @@ import model.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import javax.persistence.criteria.*;
-import java.util.List;
 
-import static service.DatabaseSessionFactory.*;
+import javax.persistence.Entity;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
+import java.util.Optional;
+
+import static service.DatabaseSessionFactory.getSessionFactory;
 
 
 public class UserDao implements DaoInterface {
-
-    public User findById(int id) {
+    @Override
+    public Optional<User> findOneBy(String param, Object value) {
+        Optional<User> res;
         Session session = getSessionFactory().openSession();
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<User> cr = cb.createQuery(User.class);
         Root<User> root = cr.from(User.class);
-        cr.select(root).where(cb.equal(root.get("id"), id));
+        cr.select(root).where(cb.equal(root.get(param), value));
 
-        Query<User> query = session.createQuery(cr);
-        return query.getSingleResult();
+        Query<?> query = session.createQuery(cr);
+        try {
+            User result = (User) query.getSingleResult();
+            session.close();
+            res = Optional.ofNullable(result);
+        } catch (NoResultException e) {
+            res = Optional.empty();
+        }
+
+        return res;
     }
 
-    public User findByName(String name) {
-        Session session = getSessionFactory().openSession();
-        CriteriaBuilder cb = session.getCriteriaBuilder();
-        CriteriaQuery<User> cr = cb.createQuery(User.class);
-        Root<User> root = cr.from(User.class);
-        cr.select(root).where(cb.equal(root.get("name"), name));
+    public Optional<User> findById(int id) {
+        return this.findOneBy("id", id);
+    }
 
-        Query<User> query = session.createQuery(cr);
-        return query.getSingleResult();
+    public Optional<User> findByName(String name) {
+        return this.findOneBy("name", name);
     }
 
     public void save(User user) {
@@ -58,8 +70,8 @@ public class UserDao implements DaoInterface {
         session.close();
     }
 
+    @SuppressWarnings("unchecked")
     public List<User> findAll() {
-        List<User> users = (List<User>) getSessionFactory().openSession().createQuery("From User").list();
-        return users;
+        return (List<User>) getSessionFactory().openSession().createQuery("From User").list();
     }
 }

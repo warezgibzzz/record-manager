@@ -14,13 +14,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>javax.persistence</groupId>
@@ -38,9 +31,9 @@
             <version>5.4.15.Final</version>
         </dependency>
         <dependency>
-            <groupId>com.github.gwenn</groupId>
+            <groupId>com.zsoltfabok</groupId>
             <artifactId>sqlite-dialect</artifactId>
-            <version>master</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -50,6 +43,11 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
             <version>2.11.0</version>
         </dependency>
         <dependency>

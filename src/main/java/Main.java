@@ -1,8 +1,5 @@
-import command.ExitAction;
-import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.UserInterruptException;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 import service.CommandResolver;
@@ -22,7 +19,6 @@ public class Main {
 
         Map<String, Object> state = StateManager.getState();
         CommandResolver resolver = new CommandResolver(lineReader, state);
-        String prompt = "record-manager # ";
-        resolver.start(prompt);
+        resolver.start((String) state.get("prompt"));
     }
 }

@@ -1,10 +1,93 @@
 package command;
 
-import org.jline.reader.Widget;
+import model.User;
+import org.jline.reader.UserInterruptException;
+import security.HashUtilInterface;
+import security.PBKDF2HashUtil;
+import service.UserService;
 
-public class SignUpAction implements Widget {
-    public boolean apply() {
+import java.io.Console;
+import java.util.Arrays;
+
+public class SignUpAction implements Action {
+    private char[] password;
+    private final UserService userService;
+    private String username;
+
+    private boolean checkPassword(Console console) {
+        System.out.print("Enter your password: ");
+        char[] password = console.readPassword();
+        System.out.print("Confirm your password: ");
+        char[] confirmPassword = console.readPassword();
+
+        if (Arrays.equals(password, confirmPassword)) {
+            this.setPassword(password);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean checkUser(Console console) {
+        System.out.print("Enter your username: ");
+        String username = console.readLine();
+
+        if (!userService.findUserByName(username).isPresent()) {
+            this.setUsername(username);
+            return true;
+        }
+        return false;
+    }
+
+    public SignUpAction() {
+        userService = new UserService();
+    }
+
+    public void apply() {
         System.out.println("SignUp");
-        return true;
+
+        Console console = System.console();
+
+        if (console == null) {
+            System.out.println("Couldn't get Console instance");
+            System.exit(0);
+        }
+
+
+        while (!this.checkUser(console)) {
+            System.out.println("This name is already taken!");
+        }
+
+        while (!this.checkPassword(console)) {
+            System.out.println("Provided passwords are not identical!");
+        }
+
+        PBKDF2HashUtil hashUtil = new PBKDF2HashUtil();
+
+        byte[] salt = hashUtil.generateSalt();
+
+        User user = new User();
+        user.setName(this.getUsername());
+        user.setSalt(new String(salt));
+        user.setPassword(new String(hashUtil.hashPassword(salt.toString(), this.getPassword().toString())));
+
+        userService.saveUser(user);
+        System.out.println("User " + username + " created! Type \"login\" to get started!");
+    }
+
+    public char[] getPassword() {
+        return password;
+    }
+
+    public void setPassword(char[] password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

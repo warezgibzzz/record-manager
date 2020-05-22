@@ -4,6 +4,7 @@ import dao.UserDao;
 import model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserService {
 
@@ -13,11 +14,11 @@ public class UserService {
         usersDao = new UserDao();
     }
 
-    public User findUser(int id) {
+    public Optional<User> findUser(int id) {
         return usersDao.findById(id);
     }
 
-    public User findUserByName(String name) {
+    public Optional<User> findUserByName(String name) {
         return usersDao.findByName(name);
     }
 

@@ -1,5 +1,8 @@
 package dao;
 
+import javax.persistence.Entity;
+import java.util.Optional;
+
 public interface DaoInterface {
-    Object findById(int id);
+    Optional<?> findOneBy(String param, Object value);
 }
