@@ -1,11 +1,11 @@
 package exception;
 
-public class NoSuchUserException extends Exception {
+public class InvalidPasswordException extends Exception {
     private final String detailMessage;
 
-    public NoSuchUserException() {
+    public InvalidPasswordException() {
         super();
-        this.detailMessage = "No such user!";
+        this.detailMessage = "Invalid password!";
     }
 
     public String getMessage() {

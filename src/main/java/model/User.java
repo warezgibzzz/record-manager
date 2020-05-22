@@ -52,6 +52,6 @@ public class User {
 
     @Override
     public String toString() {
-        return name + " (id: " + id + ")";
+        return getName() + " (id: " + getId() + ")";
     }
 }

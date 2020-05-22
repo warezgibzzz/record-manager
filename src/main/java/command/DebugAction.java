@@ -25,10 +25,15 @@ public class DebugAction implements Action {
             e.printStackTrace();
         }
     }
-    
-    public void apply(String[] args) throws JsonProcessingException {
+
+    @Override
+    public void apply(String[] args) {
         for (String arg : args) {
-            debug(StateManager.getState().get(arg));
+            try {
+                debug(StateManager.getState().get(arg));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

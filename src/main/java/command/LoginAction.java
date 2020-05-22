@@ -1,9 +1,12 @@
 package command;
 
+import exception.InvalidPasswordException;
+import exception.NoSuchUserException;
 import service.StateManager;
 import service.UserAuthenticator;
 
 import java.io.Console;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -26,9 +29,15 @@ public class LoginAction implements Action {
         Map<String, Object> state = StateManager.getState();
         UserAuthenticator authenticator = (UserAuthenticator) state.get("auth");
 
-        if (authenticator.checkUser(username, new String(password))) {
-            state.replace("isLoggedIn", true);
-            System.out.println("You are logged in!");
+        try {
+            if (authenticator.checkUser(username, new String(password))) {
+                state.replace("isLoggedIn", true);
+                System.out.println("You are logged in!");
+            }
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchUserException | InvalidPasswordException e){
+            System.out.println(e.getMessage());
         }
     }
 }

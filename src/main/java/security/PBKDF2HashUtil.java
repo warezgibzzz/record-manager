@@ -2,15 +2,19 @@ package security;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
+import java.util.Base64;
+import java.util.stream.IntStream;
 
 public class PBKDF2HashUtil implements HashUtilInterface {
-    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
     protected SecretKeyFactory factory;
+    protected SecureRandom random = new SecureRandom();
 
     public PBKDF2HashUtil() {
         try {
@@ -20,18 +24,7 @@ public class PBKDF2HashUtil implements HashUtilInterface {
         }
     }
 
-    public static String bytesToHex(byte[] bytes) {
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++) {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = HEX_ARRAY[v >>> 4];
-            hexChars[j * 2 + 1] = HEX_ARRAY[v & 0x0F];
-        }
-        return new String(hexChars);
-    }
-
     public byte[] generateSalt() {
-        SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
 
@@ -40,23 +33,22 @@ public class PBKDF2HashUtil implements HashUtilInterface {
 
 
     public byte[] hashPassword(String salt, String password) {
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 128);
-
-        byte[] hash = new byte[0];
+        char[] passwordArr = password.toCharArray();
+        byte[] saltByteArr = Base64.getDecoder().decode(salt);
+        KeySpec spec = new PBEKeySpec(passwordArr, saltByteArr, 65536, 128);
 
         try {
-            hash = this.factory.generateSecret(spec).getEncoded();
+            return this.factory.generateSecret(spec).getEncoded();
         } catch (InvalidKeySpecException e) {
             e.printStackTrace();
-            System.exit(1);
+            throw new AssertionError("Error while hashing a password:" + e.getMessage());
         }
-        return hash;
     }
 
     public boolean checkPassword(String hashedPassword, String password, String salt) {
-        byte[] hashArray = hashedPassword.getBytes();
         byte[] checkedPasswordArray = this.hashPassword(salt, password);
+        byte[] hashArray = Base64.getDecoder().decode(hashedPassword);
 
-        return Arrays.equals(hashArray, checkedPasswordArray);
+        return IntStream.range(0, checkedPasswordArray.length).allMatch(i -> checkedPasswordArray[i] == hashArray[i]);
     }
 }

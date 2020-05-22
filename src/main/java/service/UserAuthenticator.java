@@ -1,5 +1,7 @@
 package service;
 
+import exception.InvalidPasswordException;
+import exception.NoSuchUserException;
 import model.User;
 import security.HashUtilInterface;
 
@@ -14,22 +16,14 @@ public class UserAuthenticator {
         this.hashUtil = hashUtil;
     }
 
-    public boolean checkUser(String username, String password) {
+    public boolean checkUser(String username, String password) throws NoSuchUserException, InvalidKeySpecException, InvalidPasswordException {
         Optional<User> user = (new UserService()).findUserByName(username);
 
         if (!user.isPresent()) {
-            System.out.println("Invalid login");
-            return false;
+            throw new NoSuchUserException();
         }
-
-        try {
-            if (!hashUtil.checkPassword(user.get().getPassword(), password, user.get().getSalt())) {
-                System.out.println("Invalid password");
-                return false;
-            }
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-            return false;
+        if (!hashUtil.checkPassword(user.get().getPassword(), password, user.get().getSalt())) {
+            throw new InvalidPasswordException();
         }
 
         return true;

@@ -7,7 +7,9 @@ import security.PBKDF2HashUtil;
 import service.UserService;
 
 import java.io.Console;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 
 public class SignUpAction implements Action {
     private char[] password;
@@ -64,12 +66,12 @@ public class SignUpAction implements Action {
 
         PBKDF2HashUtil hashUtil = new PBKDF2HashUtil();
 
-        byte[] salt = hashUtil.generateSalt();
+        String salt = Base64.getEncoder().encodeToString(hashUtil.generateSalt());
 
         User user = new User();
         user.setName(this.getUsername());
-        user.setSalt(new String(salt));
-        user.setPassword(new String(hashUtil.hashPassword(salt.toString(), this.getPassword().toString())));
+        user.setSalt(salt);
+        user.setPassword(Base64.getEncoder().encodeToString(hashUtil.hashPassword(salt, new String(this.getPassword()))));
 
         userService.saveUser(user);
         System.out.println("User " + username + " created! Type \"login\" to get started!");
