@@ -1,4 +1,4 @@
-package exception;
+package ru.gitolite.recordmanager.exception;
 
 public class NoSuchUserException extends Exception {
     private final String detailMessage;

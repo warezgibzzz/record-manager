@@ -1,6 +1,5 @@
-package dao;
+package ru.gitolite.recordmanager.dao;
 
-import javax.persistence.Entity;
 import java.util.Optional;
 
 public interface DaoInterface {

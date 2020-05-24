@@ -1,4 +1,4 @@
-package model;
+package ru.gitolite.recordmanager.model;
 
 import javax.persistence.*;
 

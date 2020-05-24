@@ -1,7 +1,7 @@
-package service;
+package ru.gitolite.recordmanager.service;
 
-import dao.UserDao;
-import model.User;
+import ru.gitolite.recordmanager.dao.UserDao;
+import ru.gitolite.recordmanager.model.User;
 
 import java.util.List;
 import java.util.Optional;

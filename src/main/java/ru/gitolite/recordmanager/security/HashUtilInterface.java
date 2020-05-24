@@ -1,4 +1,4 @@
-package security;
+package ru.gitolite.recordmanager.security;
 
 import java.security.spec.InvalidKeySpecException;
 

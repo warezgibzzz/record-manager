@@ -1,13 +1,10 @@
-package command;
+package ru.gitolite.recordmanager.commands;
 
-import model.User;
-import org.jline.reader.UserInterruptException;
-import security.HashUtilInterface;
-import security.PBKDF2HashUtil;
-import service.UserService;
+import ru.gitolite.recordmanager.model.User;
+import ru.gitolite.recordmanager.security.PBKDF2HashUtil;
+import ru.gitolite.recordmanager.service.UserService;
 
 import java.io.Console;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -45,6 +42,7 @@ public class SignUpAction implements Action {
         userService = new UserService();
     }
 
+    @Override
     public void apply() {
         System.out.println("SignUp");
 
@@ -75,6 +73,11 @@ public class SignUpAction implements Action {
 
         userService.saveUser(user);
         System.out.println("User " + username + " created! Type \"login\" to get started!");
+    }
+
+    @Override
+    public void apply(Object[] args) {
+
     }
 
     public char[] getPassword() {

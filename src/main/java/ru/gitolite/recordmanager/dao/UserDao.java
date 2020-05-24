@@ -1,11 +1,10 @@
-package dao;
+package ru.gitolite.recordmanager.dao;
 
-import model.User;
+import ru.gitolite.recordmanager.model.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
-import javax.persistence.Entity;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,7 +12,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
-import static service.DatabaseSessionFactory.getSessionFactory;
+import static ru.gitolite.recordmanager.service.DatabaseSessionFactory.getSessionFactory;
 
 
 public class UserDao implements DaoInterface {

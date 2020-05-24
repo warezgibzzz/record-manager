@@ -77,7 +77,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>Main</mainClass>
+                                    <mainClass>ru.gitolite.recordmanager.Main</mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
