@@ -6,12 +6,11 @@ import ru.gitolite.recordmanager.service.StateManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-public class ListAction implements Action {
-    private final DaoInterface dao;
+public class ListAction<T> implements Action {
+    private final DaoInterface<T> dao;
 
-    public ListAction(DaoInterface dao) {
+    public ListAction(DaoInterface<T> dao) {
         this.dao = dao;
     }
 

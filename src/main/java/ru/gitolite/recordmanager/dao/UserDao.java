@@ -1,9 +1,9 @@
 package ru.gitolite.recordmanager.dao;
 
-import ru.gitolite.recordmanager.model.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import ru.gitolite.recordmanager.model.User;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,7 +15,7 @@ import java.util.Optional;
 import static ru.gitolite.recordmanager.service.DatabaseSessionFactory.getSessionFactory;
 
 
-public class UserDao implements DaoInterface {
+public class UserDao implements DaoInterface<User> {
     @Override
     public Optional<User> findOneBy(String param, Object value) {
         Optional<User> res;
@@ -45,32 +45,35 @@ public class UserDao implements DaoInterface {
         return this.findOneBy("name", name);
     }
 
-    public void save(User user) {
-        Session session = getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.save(user);
-        tx1.commit();
-        session.close();
-    }
-
-    public void update(User user) {
-        Session session = getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.update(user);
-        tx1.commit();
-        session.close();
-    }
-
-    public void delete(User user) {
-        Session session = getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.delete(user);
-        tx1.commit();
-        session.close();
-    }
-
     @SuppressWarnings("unchecked")
     public List<User> findAll() {
         return (List<User>) getSessionFactory().openSession().createQuery("From User").list();
+    }
+
+    @Override
+    public void save(User object) {
+        Session session = getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.save(object);
+        tx1.commit();
+        session.close();
+    }
+
+    @Override
+    public void update(User object) {
+        Session session = getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.update(object);
+        tx1.commit();
+        session.close();
+    }
+
+    @Override
+    public void delete(User object) {
+        Session session = getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.delete(object);
+        tx1.commit();
+        session.close();
     }
 }

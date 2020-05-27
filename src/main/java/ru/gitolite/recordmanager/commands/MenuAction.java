@@ -2,6 +2,7 @@ package ru.gitolite.recordmanager.commands;
 
 import ru.gitolite.recordmanager.dao.*;
 import ru.gitolite.recordmanager.exception.InvalidArgumentException;
+import ru.gitolite.recordmanager.model.User;
 import ru.gitolite.recordmanager.service.StateManager;
 
 import java.util.HashMap;
@@ -13,9 +14,9 @@ public class MenuAction implements Action {
     public MenuAction() {
         CRUDServiceMap = new HashMap<String, Action>();
 
-        DaoInterface users = new UserDao();
+        DaoInterface<User> users = new UserDao();
 
-        CRUDServiceMap.put("users", (new ListAction(users)));
+        CRUDServiceMap.put("users", (new ListAction<>(users)));
     }
 
     @Override
