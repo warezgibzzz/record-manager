@@ -35,12 +35,14 @@ public class LoginAction implements Action {
         try {
             if (authenticator.checkUser(username, new String(password))) {
                 Optional<User> user = (new UserService()).findUserByName(username);
+
+                Map<String, Action> actionMap = StateManager.protectedActions();
                 state.replace("user", user.get());
                 state.replace("prompt", "record-manager@" + user.get().getName() + " # ");
-                Map<String, Action> actionMap = StateManager.protectedActions();
                 state.replace("actions", actionMap);
-                System.out.println("You are logged in!");
                 state.replace("action", actionMap.get("menu"));
+
+                System.out.println("You are logged in!");
                 actionMap.get("menu").apply();
             }
         } catch (InvalidKeySpecException e) {

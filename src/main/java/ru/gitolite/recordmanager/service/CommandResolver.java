@@ -23,7 +23,7 @@ public class CommandResolver {
         do {
             try {
                 Map<String, Action> actionMap = (Map<String, Action>) StateManager.getState().get("actions");
-                line = reader.readLine((String) StateManager.getState().get("prompt")).split("\\s");
+                line = reader.readLine((String) StateManager.buildPrompt()).split("\\s");
                 String command = (String) line[0];
                 if (actionMap.containsKey(command)) {
                     if (line.length > 1) {

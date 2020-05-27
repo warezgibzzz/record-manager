@@ -1,6 +1,8 @@
 package ru.gitolite.recordmanager.service;
 
 import ru.gitolite.recordmanager.commands.*;
+import ru.gitolite.recordmanager.dao.DaoInterface;
+import ru.gitolite.recordmanager.model.User;
 import ru.gitolite.recordmanager.security.PBKDF2HashUtil;
 
 import java.util.HashMap;
@@ -61,12 +63,34 @@ public class StateManager {
     }
 
     public static Map<String, Action> listContextActions(Map<String, Action> actions) {
+        actions.put("menu", new MenuAction());
+        return compileActionsMap(commonActions(), actions);
+    }
+
+    public static Map<String, Action> viewContextActions(Map<String, Action> actions) {
+        actions.put("menu", new MenuAction());
+
         return compileActionsMap(actions, commonActions());
     }
 
-    public static Map<String, Action> viewContextActions() {
-        Map<String, Action> actions = new HashMap<>();
+    public static void setActions(Map<String, Action> actions) {
+        state.replace("actions", actions);
+    }
 
-        return compileActionsMap(actions, commonActions());
+    @SuppressWarnings("unchecked")
+    public static Map<String, Action> getActions() {
+        return (Map<String, Action>) state.get("actions");
+    }
+
+    public static String buildPrompt()
+    {
+        String prompt = "record-manager";
+
+        if (state.get("user") != null) {
+            prompt = prompt + "@" + ((User)state.get("user")).getName() + " # ";
+        } else {
+            prompt = prompt + " $ ";
+        }
+        return prompt;
     }
 }
