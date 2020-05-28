@@ -2,7 +2,7 @@ package ru.gitolite.recordmanager.commands;
 
 import ru.gitolite.recordmanager.dao.*;
 import ru.gitolite.recordmanager.exception.InvalidArgumentException;
-import ru.gitolite.recordmanager.model.User;
+import ru.gitolite.recordmanager.model.*;
 import ru.gitolite.recordmanager.service.StateManager;
 
 import java.util.HashMap;
@@ -14,8 +14,20 @@ public class MenuAction implements Action {
     public MenuAction() {
         CRUDServiceMap = new HashMap<String, Action>();
 
+        DaoInterface<Author> authors = new AuthorDao();
+        DaoInterface<Book> books = new BookDao();
+        DaoInterface<Category> categories = new CategoryDao();
+        DaoInterface<Country> countries = new CountryDao();
+        DaoInterface<Tag> tags = new TagDao();
+        DaoInterface<University> universities = new UniversityDao();
         DaoInterface<User> users = new UserDao();
 
+        CRUDServiceMap.put("authors", (new ListAction<>(authors)));
+        CRUDServiceMap.put("books", (new ListAction<>(books)));
+        CRUDServiceMap.put("categories", (new ListAction<>(categories)));
+        CRUDServiceMap.put("countries", (new ListAction<>(countries)));
+        CRUDServiceMap.put("tags", (new ListAction<>(tags)));
+        CRUDServiceMap.put("universities", (new ListAction<>(universities)));
         CRUDServiceMap.put("users", (new ListAction<>(users)));
     }
 
@@ -32,8 +44,7 @@ public class MenuAction implements Action {
         throw new InvalidArgumentException();
     }
 
-    protected void listActions()
-    {
+    protected void listActions() {
         System.out.println("You are in menu. Allowed commands are:");
         for (Map.Entry<String, Action> entry : StateManager.getActions().entrySet()) {
             System.out.println(entry.getKey());

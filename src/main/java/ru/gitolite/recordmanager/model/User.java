@@ -5,6 +5,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 public class User {
+    // SQLite uses sequence generator
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;

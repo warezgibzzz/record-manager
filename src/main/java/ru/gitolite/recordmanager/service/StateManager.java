@@ -1,7 +1,6 @@
 package ru.gitolite.recordmanager.service;
 
 import ru.gitolite.recordmanager.commands.*;
-import ru.gitolite.recordmanager.dao.DaoInterface;
 import ru.gitolite.recordmanager.model.User;
 import ru.gitolite.recordmanager.security.PBKDF2HashUtil;
 

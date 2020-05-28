@@ -2,6 +2,7 @@ package ru.gitolite.recordmanager.commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import ru.gitolite.recordmanager.dao.DaoInterface;
 import ru.gitolite.recordmanager.exception.InvalidArgumentException;
 import ru.gitolite.recordmanager.service.StateManager;
@@ -9,12 +10,12 @@ import ru.gitolite.recordmanager.service.StateManager;
 import javax.persistence.NoResultException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-public class ViewAction<T> implements Action {
+public class ViewAction<T> extends EntityAction<T> {
     private final DaoInterface<T> dao;
 
     public ViewAction(DaoInterface<T> dao) {
+        super(dao);
         this.dao = dao;
     }
 
@@ -25,28 +26,20 @@ public class ViewAction<T> implements Action {
 
     @Override
     public void apply(Object[] args) throws InvalidArgumentException {
-        String searchVal = String.join(" ", (String[])args);
+        String searchVal = String.join(" ", (String[]) args);
         Map<String, Action> actionMap = new HashMap<String, Action>();
-        actionMap.put("list", new ListAction<>(dao));
-        actionMap.put("view", new ViewAction<>(dao));
+        actionMap.put("list", new ListAction<T>(dao));
+        actionMap.put("view", new ViewAction<T>(dao));
+        actionMap.put("delete", new DeleteAction<T>(dao));
         StateManager.setActions(StateManager.viewContextActions(actionMap));
 
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new Hibernate5Module());
         String json = null;
 
         try {
-            Optional<T> objectById = Optional.empty();
-            try {
-                objectById = dao.findOneBy("id", searchVal);
-            } catch (NumberFormatException ignored) {}
-            Optional<T> objectByName = dao.findOneBy("name", searchVal);
+            T object = this.getEntity(searchVal);
 
-            T object = null;
-            if (objectById.isPresent()) {
-                object = objectById.get();
-            } else if (objectByName.isPresent()) {
-                object = objectByName.get();
-            }
             if (object != null) {
                 json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
 
