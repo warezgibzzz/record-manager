@@ -19,6 +19,9 @@ public class ListAction<T> implements Action {
         StateManager.getState().replace("entity", dao);
         Map<String, Action> actionMap = new HashMap<String, Action>();
 
+        ViewAction<T> action = new ViewAction<>(dao);
+        actionMap.put("view", action);
+
         for (Object entry: dao.findAll()) {
             System.out.println(entry.toString());
         }

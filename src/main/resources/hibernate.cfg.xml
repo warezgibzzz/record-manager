@@ -6,7 +6,8 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.SQLiteDialect</property>
         <property name="hibernate.connection.driver_class">org.sqlite.JDBC</property>
-        <property name="hibernate.connection.url">jdbc:sqlite:/home/gibz/proj/record-manager/db.sqlite</property>
+        <property name="hibernate.connection.url">jdbc:sqlite:db.sqlite</property>
+        <property name="hbm2ddl.auto">create</property>
 
         <mapping class="ru.gitolite.recordmanager.model.User"/>
     </session-factory>

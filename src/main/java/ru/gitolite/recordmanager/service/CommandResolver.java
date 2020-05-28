@@ -1,10 +1,10 @@
 package ru.gitolite.recordmanager.service;
 
-import ru.gitolite.recordmanager.commands.Action;
-import ru.gitolite.recordmanager.commands.ExitAction;
 import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.UserInterruptException;
+import ru.gitolite.recordmanager.commands.Action;
+import ru.gitolite.recordmanager.commands.ExitAction;
 import ru.gitolite.recordmanager.exception.InvalidArgumentException;
 
 import java.util.Arrays;
@@ -12,8 +12,7 @@ import java.util.Map;
 
 public class CommandResolver {
     private final LineReader reader;
-    @SuppressWarnings("unchecked")
-    public CommandResolver(LineReader reader, Map<String, Object> state) {
+    public CommandResolver(LineReader reader) {
         this.reader = reader;
     }
 
@@ -23,7 +22,7 @@ public class CommandResolver {
         do {
             try {
                 Map<String, Action> actionMap = (Map<String, Action>) StateManager.getState().get("actions");
-                line = reader.readLine((String) StateManager.buildPrompt()).split("\\s");
+                line = reader.readLine(StateManager.buildPrompt()).split("\\s");
                 String command = (String) line[0];
                 if (actionMap.containsKey(command)) {
                     if (line.length > 1) {
@@ -36,7 +35,7 @@ public class CommandResolver {
                 }
             } catch (UserInterruptException e) {
                 (new ExitAction()).apply();
-            } catch (InvalidArgumentException e){
+            } catch (InvalidArgumentException e) {
                 System.out.println(e.getMessage());
             } catch (EndOfFileException e) {
                 return;

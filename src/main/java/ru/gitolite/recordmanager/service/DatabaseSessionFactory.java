@@ -1,9 +1,9 @@
 package ru.gitolite.recordmanager.service;
 
-import ru.gitolite.recordmanager.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import ru.gitolite.recordmanager.model.User;
 
 public class DatabaseSessionFactory {
     private static SessionFactory sessionFactory;
@@ -15,7 +15,9 @@ public class DatabaseSessionFactory {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure();
+
                 configuration.addAnnotatedClass(User.class);
+
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
                 sessionFactory = configuration.buildSessionFactory(builder.build());
             } catch (Exception e) {

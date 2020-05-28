@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class LoginAction implements Action {
-    public void apply() {
+    public void apply() throws InvalidArgumentException {
         Console console = System.console();
         if (console == null) {
             System.out.println("Couldn't get Console instance");
@@ -35,6 +35,10 @@ public class LoginAction implements Action {
         try {
             if (authenticator.checkUser(username, new String(password))) {
                 Optional<User> user = (new UserService()).findUserByName(username);
+
+                if (!user.isPresent()) {
+                    throw new NoSuchUserException();
+                }
 
                 Map<String, Action> actionMap = StateManager.protectedActions();
                 state.replace("user", user.get());
