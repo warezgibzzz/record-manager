@@ -81,4 +81,9 @@ public class UniversityDao implements DaoInterface<University> {
         tx1.commit();
         session.close();
     }
+
+    @Override
+    public String toString() {
+        return "university" ;
+    }
 }

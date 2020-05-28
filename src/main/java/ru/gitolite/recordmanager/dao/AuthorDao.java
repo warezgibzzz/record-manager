@@ -5,15 +5,12 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import ru.gitolite.recordmanager.model.Author;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import static ru.gitolite.recordmanager.service.DatabaseSessionFactory.getSessionFactory;
@@ -112,5 +109,10 @@ public class AuthorDao implements DaoInterface<Author> {
         session.delete(object);
         tx1.commit();
         session.close();
+    }
+
+    @Override
+    public String toString() {
+        return "author" ;
     }
 }

@@ -19,8 +19,10 @@ public class ListAction<T> implements Action {
         StateManager.getState().replace("entity", dao);
         Map<String, Action> actionMap = new HashMap<String, Action>();
 
-        ViewAction<T> action = new ViewAction<>(dao);
-        actionMap.put("view", action);
+        ViewAction<T> viewAction = new ViewAction<>(dao);
+        DeleteAction<T> deleteAction = new DeleteAction<>(dao);
+        actionMap.put("view", viewAction);
+        actionMap.put("delete", deleteAction);
 
         for (Object entry: dao.findAll()) {
             System.out.println(entry.toString());
@@ -32,5 +34,15 @@ public class ListAction<T> implements Action {
     @Override
     public void apply(Object[] args) throws InvalidArgumentException {
         throw new InvalidArgumentException();
+    }
+
+    @Override
+    public String toString() {
+        return "list";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Lists selected DAO from DB";
     }
 }

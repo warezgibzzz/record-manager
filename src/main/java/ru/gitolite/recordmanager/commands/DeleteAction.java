@@ -43,4 +43,14 @@ public class DeleteAction<T> extends EntityAction<T> {
             System.out.println(e.getMessage());
         }
     }
+
+    @Override
+    public String toString() {
+        return "delete";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Delete an " + dao.toString() + " entity by id or by name.";
+    }
 }

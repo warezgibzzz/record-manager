@@ -8,6 +8,7 @@ import org.jline.terminal.TerminalBuilder;
 import ru.gitolite.recordmanager.service.CommandResolver;
 import ru.gitolite.recordmanager.service.DatabaseSessionFactory;
 import ru.gitolite.recordmanager.service.StateManager;
+
 import java.io.IOException;
 import java.util.Map;
 

@@ -51,4 +51,14 @@ public class ViewAction<T> extends EntityAction<T> {
             System.out.println(e.getMessage());
         }
     }
+
+    @Override
+    public String toString() {
+        return "view";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Shows selected " + dao.toString() + " data by id or by name";
+    }
 }

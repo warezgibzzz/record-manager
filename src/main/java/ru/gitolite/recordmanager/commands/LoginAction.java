@@ -60,4 +60,14 @@ public class LoginAction implements Action {
     public void apply(Object[] args) throws InvalidArgumentException {
         throw new InvalidArgumentException();
     }
+
+    @Override
+    public String toString() {
+        return "login";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Initiate an app login";
+    }
 }

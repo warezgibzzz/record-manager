@@ -6,4 +6,5 @@ public interface Action {
     void apply() throws InvalidArgumentException;
     void apply(Object[] args) throws InvalidArgumentException;
     String toString();
+    String getDescription();
 }

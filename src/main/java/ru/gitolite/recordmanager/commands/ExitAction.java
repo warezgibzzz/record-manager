@@ -13,4 +13,14 @@ public class ExitAction implements Action {
     public void apply(Object[] args) throws InvalidArgumentException {
         throw new InvalidArgumentException();
     }
+
+    @Override
+    public String toString() {
+        return "help";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Exit from application";
+    }
 }

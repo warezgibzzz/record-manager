@@ -5,6 +5,7 @@ import ru.gitolite.recordmanager.exception.InvalidArgumentException;
 import ru.gitolite.recordmanager.model.*;
 import ru.gitolite.recordmanager.service.StateManager;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,7 +48,17 @@ public class MenuAction implements Action {
     protected void listActions() {
         System.out.println("You are in menu. Allowed commands are:");
         for (Map.Entry<String, Action> entry : StateManager.getActions().entrySet()) {
-            System.out.println(entry.getKey());
+            System.out.println(entry.getKey() + " - " + entry.getValue().getDescription());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "menu";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Go back to menu";
     }
 }

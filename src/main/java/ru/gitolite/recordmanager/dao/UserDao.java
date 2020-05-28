@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import ru.gitolite.recordmanager.model.User;
+import ru.gitolite.recordmanager.service.StateManager;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -70,6 +71,12 @@ public class UserDao implements DaoInterface<User> {
 
     @Override
     public void delete(User object) {
+        User currentUser = (User) StateManager.getState().get("user");
+        if  (object.getId() == currentUser.getId()) {
+            System.out.println("You cannot delete yourself");;
+            return;
+        }
+
         Session session = getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         session.delete(object);

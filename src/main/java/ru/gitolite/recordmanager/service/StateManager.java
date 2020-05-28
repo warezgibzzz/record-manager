@@ -1,9 +1,12 @@
 package ru.gitolite.recordmanager.service;
 
+import com.github.javafaker.Bool;
 import ru.gitolite.recordmanager.commands.*;
 import ru.gitolite.recordmanager.model.User;
 import ru.gitolite.recordmanager.security.PBKDF2HashUtil;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,17 +16,26 @@ import java.util.stream.Stream;
 public class StateManager {
     private static Map<String, Object> state;
 
-    private StateManager() {}
+    private StateManager() {
+    }
 
     public static Map<String, Object> getState() {
         if (state == null) {
             Map<String, Object> initialState = new HashMap<>();
+
+            Map<String, Action> actions = publicActions();
+            if (!Files.exists(Paths.get("seed.lock"))) {
+                actions.put("seed", new SeedAction());
+            }
+
             initialState.put("user", null);
             initialState.put("action", null);
             initialState.put("entity", null);
-            initialState.put("actions", publicActions());
+            initialState.put("actions", actions);
             initialState.put("auth", new UserAuthenticator(new PBKDF2HashUtil()));
             initialState.put("prompt", "record-manager $ ");
+            initialState.put("seed", false);
+
             state = initialState;
         }
         return state;
@@ -42,6 +54,7 @@ public class StateManager {
     private static Map<String, Action> commonActions() {
         Map<String, Action> actions = new HashMap<>();
         actions.put("exit", new ExitAction());
+        actions.put("help", new HelpAction());
 
         return actions;
     }
@@ -72,23 +85,22 @@ public class StateManager {
         return compileActionsMap(actions, commonActions());
     }
 
-    public static void setActions(Map<String, Action> actions) {
-        state.replace("actions", actions);
-    }
-
     @SuppressWarnings("unchecked")
     public static Map<String, Action> getActions() {
         return (Map<String, Action>) state.get("actions");
     }
 
-    public static String buildPrompt()
-    {
-        String prompt = "record-manager";
+    public static void setActions(Map<String, Action> actions) {
+        state.replace("actions", actions);
+    }
+
+    public static String buildPrompt() {
+        String prompt = "record-manager" ;
 
         if (state.get("user") != null) {
-            prompt = prompt + "@" + ((User)state.get("user")).getName() + " # ";
+            prompt = prompt + "@" + ((User) state.get("user")).getName() + " # " ;
         } else {
-            prompt = prompt + " $ ";
+            prompt = prompt + " $ " ;
         }
         return prompt;
     }

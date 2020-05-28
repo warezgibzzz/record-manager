@@ -81,4 +81,9 @@ public class CategoryDao implements DaoInterface<Category> {
         tx1.commit();
         session.close();
     }
+
+    @Override
+    public String toString() {
+        return "category" ;
+    }
 }

@@ -95,4 +95,14 @@ public class SignUpAction implements Action {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public String toString() {
+        return "sign-up";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Register in system";
+    }
 }

@@ -81,4 +81,9 @@ public class BookDao implements DaoInterface<Book> {
         tx1.commit();
         session.close();
     }
+
+    @Override
+    public String toString() {
+        return "book" ;
+    }
 }

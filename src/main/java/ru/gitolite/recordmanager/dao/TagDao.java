@@ -3,6 +3,7 @@ package ru.gitolite.recordmanager.dao;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import ru.gitolite.recordmanager.model.Category;
 import ru.gitolite.recordmanager.model.Tag;
 
 import javax.persistence.NoResultException;
@@ -80,5 +81,10 @@ public class TagDao implements DaoInterface<Tag> {
         session.delete(object);
         tx1.commit();
         session.close();
+    }
+
+    @Override
+    public String toString() {
+        return "tag" ;
     }
 }

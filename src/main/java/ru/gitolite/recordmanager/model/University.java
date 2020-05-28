@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Table(name = "universities")
 public class University {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
